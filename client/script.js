@@ -4,12 +4,12 @@ import user from './assets/user.svg';
 const form = document.querySelector('form');
 const chatContainer = document.querySelector('#chat_container');
 
-let loadlnterval;
+let loadInterval;
 
 function loader(element) {
   element.textContent = '';
 
-  loadInterval = setInterval(() => {
+  loadInterval = setInterval (() => {
     element.textContent += '.';
 
     if (element.textContent === '....') {
@@ -18,15 +18,15 @@ function loader(element) {
   },300)
 }
 
-function typeText(eLement, text) {
+function typeText(element, text) {
   let index = 0;
 
-  let interval = setlnterval(() => {
+  let interval = setInterval (() => {
    if(index < text.length){
      element.innerHTML += text.charAt(index);
      index++;
   } else {
-    cleahrntervaL(intervaL);
+    clearInterval(interval);
    }
   },20)
 }
@@ -78,7 +78,7 @@ const handleSubmit = async (e) => {
    loader(messageDiv);
 
   // fetch data from server -> bot's response
-  const response = await fetch('http://localhost:5000', {
+  const response = await fetch('http://localhost:5000/', {
     method: 'POST',
     headers: {
       'Content-Type' : 'application/json'
@@ -88,7 +88,7 @@ const handleSubmit = async (e) => {
     })
   })
 
-  clearInterval(loadlnterval);
+  clearInterval(loadInterval);
   messageDiv.innerHTML = '';
 
   if(response.ok) {
