@@ -9,26 +9,26 @@ let loadInterval;
 function loader(element) {
   element.textContent = '';
 
-  loadInterval = setInterval (() => {
+  loadInterval = setInterval(() => {
     element.textContent += '.';
 
     if (element.textContent === '....') {
       element.textContent = '';
     }
-  },300)
+  }, 300)
 }
 
 function typeText(element, text) {
   let index = 0;
 
-  let interval = setInterval (() => {
-   if(index < text.length){
-     element.innerHTML += text.charAt(index);
-     index++;
-  } else {
-    clearInterval(interval);
-   }
-  },20)
+  let interval = setInterval(() => {
+    if (index < text.length) {
+      element.innerHTML += text.charAt(index);
+      index++;
+    } else {
+      clearInterval(interval);
+    }
+  }, 20)
 }
 
 function generateUniqueId() {
@@ -39,7 +39,7 @@ function generateUniqueId() {
   return `id-${timestamp}-${hexadecimalString}`;
 }
 
-function chatStripe (isAi, value, uniqueId) {
+function chatStripe(isAi, value, uniqueId) {
   return (
     `
       <div class="wrapper ${isAi && 'ai'}">
@@ -60,10 +60,10 @@ function chatStripe (isAi, value, uniqueId) {
 const handleSubmit = async (e) => {
   e.preventDefault();
 
-  const data  = new FormData(form);
+  const data = new FormData(form);
 
   // user's chatstripe
-  chatContainer.innerHTML += chatStripe (false, data.get('prompt'));
+  chatContainer.innerHTML += chatStripe(false, data.get('prompt'));
 
   form.reset();
 
@@ -75,13 +75,13 @@ const handleSubmit = async (e) => {
 
   const messageDiv = document.getElementById(uniqueId);
 
-   loader(messageDiv);
+  loader(messageDiv);
 
   // fetch data from server -> bot's response
-  const response = await fetch('https://ale-test.onrender.com', {
+  const response = await fetch('http://localhost:5000', {
     method: 'POST',
     headers: {
-      'Content-Type' : 'application/json'
+      'Content-Type': 'application/json'
     },
     body: JSON.stringify({
       prompt: data.get('prompt')
@@ -91,7 +91,7 @@ const handleSubmit = async (e) => {
   clearInterval(loadInterval);
   messageDiv.innerHTML = '';
 
-  if(response.ok) {
+  if (response.ok) {
     const data = await response.json();
     const parsedData = data.bot.trim();
 
@@ -101,7 +101,7 @@ const handleSubmit = async (e) => {
 
     messageDiv.innerHTML = "Algo deu errado";
 
-    alert(err);
+    console.log(err);
   }
 }
 

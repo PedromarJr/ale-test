@@ -8,7 +8,7 @@ dotenv.config( );
 
 
 const configuration = new Configuration({
- apiKey: process.env.OPENAI_API_KEY,
+  apiKey: process.env.OPENAI_API_KEY,
 });
 
 const openai = new OpenAIApi(configuration);
@@ -18,18 +18,18 @@ app.use(cors());
 app.use(express.json());
 
 app.get('/', async (req, res) => {
-  res.status (200).send({
+  res.status(200).send({
     message: 'Olá do Ale receitas AI',
   })
 });
 
 app.post('/', async (req, res) => {
-    try {
+  try {
     const prompt = req.body.prompt;
-
-    const response = await openai.createChatCompletion({
+    
+    const response = await openai.createCompletion({
       model: "text-davinci-003",
-      prompt: `${prompt}`,
+      prompt: "Por favor me indicar se algo que eu escrever a seguir não faça parte de itens seguros nem apropriados para serem utilizados na culinária ou no preparo de alimento. Escreva uma receita com base nestes ingredientes:\n\nSal\nou\nÁgua\n\nInstruções:"+`${prompt}`,
       temperature: 0,
       max_tokens: 3000,
       top_p: 1,
@@ -38,12 +38,11 @@ app.post('/', async (req, res) => {
     });
 
     res.status(200).send({
-        bot: response.data.choices[0].text
-    })
-    } catch (error){
-        console.log(error);
-        res.status(500).send({ error })
-    }
-})
+      bot: response.data.choices[0].text
+    });
+  } catch (error) {
+    res.status(500).send({ error })
+  }
+});
 
 app.listen(5000, () => console.log('server is running on port http://localhost:5000/'))
